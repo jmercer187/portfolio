@@ -1,0 +1,44 @@
+﻿@model GuildCars.Models.UIModels.VehicleUI
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    
+    <hr />    
+    <div class="panel panel-default">
+            <div class="panel-heading">@Model.ModelYear @Model.MakeName @Model.ModelName</div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3"><img src="@Model.ImageFilePath" /></div>
+                    <div class="col-sm-3">
+                        <p>Body Style: @Model.BodyStyleName</p>
+                        <p>Transmission: @Model.TransmissionType</p>
+                        <p>Color: @Model.ColorName</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <p>Interior: @Model.InteriorType</p>
+                        <p>Mileage: @Model.Mileage</p>
+                    <p>VIN: @Model.VIN</p>
+                </div>
+                <div class="col-sm-3">
+                    <p>MSRP: @Model.MSRP</p>
+                    <p>Sale Price: @Model.SalePrice</p>
+                </div>
+            </div>
+                <p></p>
+                <div class="row">
+                    <div class="text-center"><p>Description: @Model.VehicleDescription</p></div>
+
+                </div>
+            </div>
+        </div>
+        <hr />
+    
+    <p>@Html.ActionLink("Contact Us", "Contact", "Home", null, new { @class = "btn btn-info" })</p>
+
+</div>

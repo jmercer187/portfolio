@@ -1,0 +1,18 @@
+﻿@model List<GuildCars.Models.Tables.Specials>
+
+@{
+    ViewBag.Title = "Specials";
+}
+
+<h2>Specials</h2>
+
+<div class="row">
+    @foreach (var special in Model)
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading"><strong>@special.SpecialTitle</strong></div>
+            <div class="panel-body">@special.SpecialDescription</div>
+        </div>
+    }
+
+</div>
