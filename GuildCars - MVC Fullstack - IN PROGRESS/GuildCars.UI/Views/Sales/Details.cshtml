@@ -1,0 +1,111 @@
+﻿@model GuildCars.UI.Models.MakeSaleVM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Purchase Vehicle</h2>
+
+<div class="row">
+
+    <hr />
+    <div class="panel panel-default">
+        <div class="panel-heading">@Model.Vehicle.ModelYear @Model.Vehicle.MakeName @Model.Vehicle.ModelName</div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-3"><img src="@Model.Vehicle.ImageFilePath" /></div>
+                <div class="col-sm-3">
+                    <p>Body Style: @Model.Vehicle.BodyStyleName</p>
+                    <p>Transmission: @Model.Vehicle.TransmissionType</p>
+                    <p>Color: @Model.Vehicle.ColorName</p>
+                </div>
+                <div class="col-sm-3">
+                    <p>Interior: @Model.Vehicle.InteriorType</p>
+                    <p>Mileage: @Model.Vehicle.Mileage</p>
+                    <p>VIN: @Model.Vehicle.VIN</p>
+                </div>
+                <div class="col-sm-3">
+                    <p>MSRP: @Model.Vehicle.MSRP</p>
+                    <p>Sale Price: @Model.Vehicle.SalePrice</p>
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="text-center"><p>Description: @Model.Vehicle.VehicleDescription</p></div>
+
+            </div>
+        </div>
+    </div>
+    <hr />
+</div>
+<div>
+@Html.ValidationSummary()
+@using (Html.BeginForm("Details", "Sales", FormMethod.Post))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Name</label>
+            @Html.TextBoxFor(c => c.Name, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Phone</label>
+            @Html.TextBoxFor(c => c.Phone, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>Email</label>
+            @Html.TextBoxFor(c => c.Email, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Street Address 1</label>
+            @Html.TextBoxFor(c => c.Street1, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Street Address 2</label>
+            @Html.TextBoxFor(c => c.Street2, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>City</label>
+            @Html.TextBoxFor(c => c.City, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>State</label>
+            @Html.DropDownListFor(c => c.StateId, Model.States, "-SELECT-", new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>Email</label>
+            @Html.TextBoxFor(c => c.Zip, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Purchase Price</label>
+            @Html.TextBoxFor(c => c.SalePrice, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-6">
+            <label>Purchase Type</label>
+            @Html.DropDownListFor(c => c.PruchaseTypeId, Model.PurchaseMethods, "-SELECT-", new { @class = "form-control" })
+        </div>
+    </div>
+
+    @Html.ActionLink("Cancel", "Index", "Sales", null, new { @class = "btn btn-default" })
+    <button class="btn btn-primary">Create Sale</button>
+}
+</div>
+
+

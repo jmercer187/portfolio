@@ -1,0 +1,52 @@
+﻿@model GuildCars.UI.Models.HomeVM
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron" id="jumbotron">
+    @foreach (var special in Model.Specials)
+    {
+        <div id="special">
+            <h1>@special.SpecialTitle</h1>
+            <p>@special.SpecialDescription</p>
+        </div>
+    }
+    
+</div>
+
+<hr />
+<h2>Featured Vehicles</h2>
+
+<div class="row">
+    @foreach (var vehicle in Model.Vehicles)
+    {
+        <div class="panel panel-default col-sm-4">
+            <div class="text-center"><img src="@vehicle.ImageFilePath"/></div>
+            <div class="text-center"><p>@vehicle.Year / @vehicle.MakeName / @vehicle.ModelName</p></div>
+            <div class="text-center"><p><strong>$@vehicle.Price</strong></p></div>
+            <div class="text-center"> @Html.ActionLink("Details", "Details", "Inventory", new { id = vehicle.VehicleId}, new { @class = "btn btn-info" })</div>
+            </div>
+    }
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+
+            $("#jumbotron > div:gt(0)").hide();
+            setInterval(function () {
+                $('#jumbotron > div:first')
+                    .hide(650)
+                    .next()
+                    .show(650)
+                    .end()
+                    .appendTo('#jumbotron');
+            }, 12000);
+        });
+  
+</script>
+}
+
