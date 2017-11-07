@@ -10,7 +10,7 @@ namespace GuildCars.Models.Tables
     {
         public int MakeId { get; set; }
         public string MakeName { get; set; }
-        public string Id { get; set; }
+        public string UserName { get; set; }
         public DateTime DateAdded { get; set; }
     }
 }

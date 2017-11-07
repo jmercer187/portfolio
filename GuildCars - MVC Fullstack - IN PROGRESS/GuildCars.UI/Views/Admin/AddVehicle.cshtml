@@ -1,8 +1,93 @@
-﻿
+﻿@model GuildCars.UI.Models.AddVehicleVM
 
 @{
     ViewBag.Title = "AddVehicle";
 }
 
-<h2>AddVehicle</h2>
+<h2>Add a New Vehicle</h2>
+
+<div>
+    <hr />
+
+    @Html.ValidationSummary()
+    @using (Html.BeginForm("AddVehicle", "Admin", FormMethod.Post))
+    {
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Make</label>
+                @Html.DropDownListFor(v => v.MakeId, Model.Make, "-SELECT-", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>Model</label>
+                @Html.DropDownListFor(v => v.ModelId, Model.Model, "-SELECT-", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Type</label>
+                <p>New: @Html.RadioButtonFor(v => v.Type, false) || 
+                Used: @Html.RadioButtonFor(v => v.Type, true)</p>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Body Style</label>
+                @Html.DropDownListFor(v => v.BodyStyleId, Model.BodyStyle, "-SELECT-", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Year</label>
+                @Html.TextBoxFor(v => v.Year, new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>Transmission</label>
+                @Html.DropDownListFor(v => v.TransmissionId, Model.Transmission, "-SELECT-", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Mileage</label>
+                @Html.TextBoxFor(v => v.Mileage, new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>VIN</label>
+                @Html.TextBoxFor(v => v.VIN, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>MSRP</label>
+                @Html.TextBoxFor(v => v.MSRP, new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-6">
+                <label>Sale Price</label>
+                @Html.TextBoxFor(v => v.SalePrice, new { @class = "form-control" })
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label>Description</label>
+                @Html.TextAreaFor(v => v.Description, new { @class = "form-control" })
+            </div>
+        </div>
+        
+        <p>image thing goes here</p>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Featured</label>
+                @Html.CheckBoxFor(v => v.Featured, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <hr />
+
+        @Html.ActionLink("Cancel", "Index", "Admin", null, new { @class = "btn btn-default" })
+        <button class="btn btn-primary">Create Sale</button>
+    }
+</div>
 

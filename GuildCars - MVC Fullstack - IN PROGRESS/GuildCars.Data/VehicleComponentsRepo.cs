@@ -5,62 +5,201 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GuildCars.Models.Tables;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace GuildCars.Data
 {
     public class VehicleComponentsRepo : IVehicleComponentsRepo
     {
-        public void DeleteBodyStyle(BodyStyle bodyStyle)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteColor(Color color)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteInterior(Interior interior)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteMake(int makeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteModel(Model model)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<BodyStyle> GetAllBodyStyles()
         {
-            throw new NotImplementedException();
+            List<BodyStyle> bodyStyles = new List<BodyStyle>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayBodyStyles", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        BodyStyle currentRow = new BodyStyle();
+
+                        currentRow.BodyStyleId = (int)dr["BodyStyleId"];
+                        currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
+
+                        bodyStyles.Add(currentRow);
+                    }
+                }
+            }
+            return bodyStyles;
         }
 
         public List<Color> GetAllColors()
         {
-            throw new NotImplementedException();
+            List<Color> colors = new List<Color>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayColors", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Color currentRow = new Color();
+
+                        currentRow.ColorId = (int)dr["ColorId"];
+                        currentRow.ColorName = dr["ColorName"].ToString();
+
+                        colors.Add(currentRow);
+                    }
+                }
+            }
+            return colors;
         }
 
         public List<Interior> GetAllInteriors()
         {
-            throw new NotImplementedException();
+            List<Interior> interiors = new List<Interior>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayInteriors", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Interior currentRow = new Interior();
+
+                        currentRow.InteriorId = (int)dr["InteriorId"];
+                        currentRow.InteriorType = dr["InteriorType"].ToString();
+
+                        interiors.Add(currentRow);
+                    }
+                }
+            }
+            return interiors;
         }
 
         public List<Make> GetAllMakes()
         {
-            throw new NotImplementedException();
+            List<Make> makes = new List<Make>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayMakes", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Make currentRow = new Make();
+
+                        currentRow.MakeId = (int)dr["MakeId"];
+                        currentRow.UserName = dr["UserName"].ToString();
+                        currentRow.MakeName = dr["MakeName"].ToString();
+                        currentRow.DateAdded = (DateTime)dr["DateAdded"];
+
+                        makes.Add(currentRow);
+                    }
+                }
+            }
+            return makes;
         }
 
         public List<Model> GetAllModels()
         {
-            throw new NotImplementedException();
+            List<Model> models = new List<Model>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayModels", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Model currentRow = new Model();
+
+                        currentRow.MakeName = dr["MakeName"].ToString();
+                        currentRow.ModelId = (int)dr["ModelId"];
+                        currentRow.UserName = dr["UserName"].ToString();
+                        currentRow.ModelName = dr["ModelName"].ToString();
+                        currentRow.DateAdded = (DateTime)dr["DateAdded"];
+
+                        models.Add(currentRow);
+                    }
+                }
+            }
+            return models;
         }
 
         public List<Transmission> GetAllTransmissions()
+        {
+            List<Transmission> transmissions = new List<Transmission>();
+
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DisplayTransmissions", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        Transmission currentRow = new Transmission();
+
+                        currentRow.TransmissionId = (int)dr["TransmissionId"];
+                        currentRow.TransmissionType = dr["TransmissionType"].ToString();
+
+                        transmissions.Add(currentRow);
+                    }
+                }
+            }
+            return transmissions;
+        }
+
+        public BodyStyle GetBodyStyleById(int bodyStyleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Color GetColorById(int colorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Interior GetInteriorById(int interiorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Make GetMakeById(int makeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Model GetModelById(int modelId)
         {
             throw new NotImplementedException();
         }

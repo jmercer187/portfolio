@@ -32,6 +32,8 @@ namespace GuildCars.UI.Models
         [Required(ErrorMessage = "Please select whether the vehicle is New or Used")]
         public bool Type { get; set; }
         public bool Featured { get; set; }
+        [Required(ErrorMessage = "Please enter the VIN")]
+        public string VIN { get; set; }
 
         [Required(ErrorMessage = "Please select a make")]
         public int MakeId { get; set; }

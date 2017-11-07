@@ -203,6 +203,376 @@ END
 
 GO
 
+-- Display All Makes
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayMakes')
+		DROP PROCEDURE DisplayMakes
+GO
+
+CREATE PROCEDURE DisplayMakes AS
+BEGIN
+	SELECT m.MakeId, m.MakeName, users.UserName, m.DateAdded
+	FROM Make m
+		INNER JOIN AspNetUsers users ON m.Id = users.Id
+END
+GO
+
+-- get make by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetMakeById')
+		DROP PROCEDURE GetMakeById
+GO
+
+CREATE PROCEDURE GetMakeById (
+	@MakeId int
+	) AS
+BEGIN
+	SELECT MakeName, Id, DateAdded
+	FROM Make
+	WHERE MakeId = @MakeId
+END
+GO
+
+-- Add make
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertMake')
+      DROP PROCEDURE InsertMake
+GO
+
+CREATE PROCEDURE InsertMake (
+	@MakeId int output,
+	@MakeName nvarchar(64),
+	@Id nvarchar(128)
+) AS
+BEGIN
+	
+	INSERT INTO Make(MakeName, Id)
+	VALUES  (@MakeName, @Id)
+
+	SET
+	@MakeId = SCOPE_IDENTITY();
+END
+GO
+
+--update make
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateMake')
+      DROP PROCEDURE UpdateMake
+	  GO
+
+CREATE PROCEDURE UpdateMake (
+	@MakeId int,
+	@MakeName nvarchar(64),
+	@Id nvarchar(128)
+) AS
+BEGIN
+	UPDATE Make SET
+	MakeName = @MakeName,
+	Id = @Id
+	WHERE MakeId = @MakeId
+END
+GO
+
+---- All Models in System
+---- show all Make / Model / Date Added (to system) / User (who added model)
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayModels')
+		DROP PROCEDURE DisplayModels
+GO
+
+CREATE PROCEDURE DisplayModels AS
+BEGIN
+	SELECT mk.MakeName, m.ModelName, users.UserName, m.DateAdded, m.ModelId
+	FROM model m
+		INNER JOIN AspNetUsers users ON m.Id = users.Id
+		INNER JOIN Make mk on mk.MakeId = m.MakeId
+END
+GO
+
+-- get model by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetModelById')
+		DROP PROCEDURE GetModelById
+GO
+
+CREATE PROCEDURE GetModelById (
+	@ModelId int
+	) AS
+BEGIN
+	SELECT ModelName, Id, DateAdded
+	FROM Model
+	WHERE ModelId = @ModelId
+END
+GO
+
+-- Add model
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertModel')
+      DROP PROCEDURE InsertModel
+GO
+
+CREATE PROCEDURE InsertModel (
+	@ModelId int output,
+	@ModelName nvarchar(64),
+	@Id nvarchar(128)
+) AS
+BEGIN
+	
+	INSERT INTO Model(ModelName, Id)
+	VALUES  (@ModelName, @Id)
+
+	SET
+	@ModelId = SCOPE_IDENTITY();
+END
+GO
+
+--update model
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateModel')
+      DROP PROCEDURE UpdateModel
+	  GO
+
+CREATE PROCEDURE UpdateModel (
+	@ModelId int,
+	@ModelName nvarchar(64),
+	@Id nvarchar(128)
+) AS
+BEGIN
+	UPDATE Model SET
+	ModelName = @ModelName,
+	Id = @Id
+	WHERE ModelId = @ModelId
+END
+GO
+
+-- Display All Colors
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayColors')
+		DROP PROCEDURE DisplayColors
+GO
+
+CREATE PROCEDURE DisplayColors AS
+BEGIN
+	SELECT ColorId, ColorName
+	FROM Color
+END
+GO
+
+-- get color by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetColorById')
+		DROP PROCEDURE GetColorById
+GO
+
+CREATE PROCEDURE GetColorById (
+	@ColorId int
+	) AS
+BEGIN
+	SELECT ColorName
+	FROM Color
+	WHERE ColorId = @ColorId
+END
+GO
+
+-- Add color
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertColor')
+      DROP PROCEDURE InsertColor
+GO
+
+CREATE PROCEDURE InsertColor (
+	@ColorId int output,
+	@ColorName nvarchar(64)
+) AS
+BEGIN
+	
+	INSERT INTO Color(ColorName)
+	VALUES  (@ColorName)
+
+	SET
+	@ColorId = SCOPE_IDENTITY();
+END
+GO
+
+--update color
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateColor')
+      DROP PROCEDURE UpdateColor
+	  GO
+
+CREATE PROCEDURE UpdateColor (
+	@ColorId int,
+	@ColorName nvarchar(64)
+) AS
+BEGIN
+	UPDATE Color SET
+	ColorName = @ColorName
+	WHERE ColorId = @ColorId
+END
+GO
+
+
+-- Display All BodyStyles
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayBodyStyles')
+		DROP PROCEDURE DisplayBodyStyles
+GO
+
+CREATE PROCEDURE DisplayBodyStyles AS
+BEGIN
+	SELECT BodyStyleId, BodyStyleName
+	FROM BodyStyle
+END
+GO
+
+-- get bodystyle by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetBodyStyleById')
+		DROP PROCEDURE GetBodyStyleById
+GO
+
+CREATE PROCEDURE GetBodyStyleById (
+	@BodyStyleId int
+	) AS
+BEGIN
+	SELECT BodyStyleName
+	FROM BodyStyle
+	WHERE BodyStyleId = @BodyStyleId
+END
+GO
+
+-- Add bodystyle
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertBodyStyle')
+      DROP PROCEDURE InsertBodyStyle
+GO
+
+CREATE PROCEDURE InsertBodyStyle (
+	@BodyStyleId int output,
+	@BodyStyleName nvarchar(64)
+) AS
+BEGIN
+	
+	INSERT INTO BodyStyle(BodyStyleName)
+	VALUES  (@BodyStyleName)
+
+	SET
+	@BodyStyleId = SCOPE_IDENTITY();
+END
+GO
+
+--update bodystyle
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateBodyStyle')
+      DROP PROCEDURE UpdateBodyStyle
+	  GO
+
+CREATE PROCEDURE UpdateBodyStyle (
+	@BodyStyleId int,
+	@BodyStyleName nvarchar(64)
+) AS
+BEGIN
+	UPDATE BodyStyle SET
+	BodyStyleName = @BodyStyleName
+	WHERE BodyStyleId = @BodyStyleId
+END
+GO
+
+-- Display All Interior Types
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayInteriors')
+		DROP PROCEDURE DisplayInteriors
+GO
+
+CREATE PROCEDURE DisplayInteriors AS
+BEGIN
+	SELECT InteriorId, InteriorType
+	FROM Interior
+END
+GO
+
+-- get interior type by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetInteriorById')
+		DROP PROCEDURE GetInteriorById
+GO
+
+CREATE PROCEDURE GetInteriorById (
+	@InteriorId int
+	) AS
+BEGIN
+	SELECT InteriorType
+	FROM Interior
+	WHERE InteriorId = @InteriorId
+END
+GO
+
+-- Add interior type
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertInterior')
+      DROP PROCEDURE InsertInterior
+GO
+
+CREATE PROCEDURE InsertInterior (
+	@InteriorId int output,
+	@InteriorType nvarchar(64)
+) AS
+BEGIN
+	
+	INSERT INTO Interior(InteriorType)
+	VALUES  (@InteriorType)
+
+	SET
+	@InteriorId = SCOPE_IDENTITY();
+END
+GO
+
+--update interior type
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateInterior')
+      DROP PROCEDURE UpdateInterior
+	  GO
+
+CREATE PROCEDURE UpdateInterior (
+	@InteriorId int,
+	@InteriorType nvarchar(64)
+) AS
+BEGIN
+	UPDATE Interior SET
+	InteriorType = @InteriorType
+	WHERE InteriorId = @InteriorId
+END
+GO
+
+-- Display All Transmission Types
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayTransmissions')
+		DROP PROCEDURE DisplayTransmissions
+GO
+
+CREATE PROCEDURE DisplayTransmissions AS
+BEGIN
+	SELECT TransmissionId, TransmissionType
+	FROM Transmission
+END
+GO
+
 -- All Specials in System
 -- Show title and description
 
@@ -214,6 +584,78 @@ GO
 CREATE PROCEDURE DisplaySpecials AS
 BEGIN
 	SELECT * FROM Specials
+END
+GO
+
+-- get special by ID (pretty much just for testing?)
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'GetSpecialById')
+		DROP PROCEDURE GetSpecialById
+GO
+
+CREATE PROCEDURE GetSpecialById (
+	@SpecialId int
+	) AS
+BEGIN
+	SELECT SpecialTitle, SpecialDescription
+	FROM Specials
+	WHERE SpecialId = @SpecialId
+END
+GO
+
+-- Add Special
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'InsertSpecial')
+      DROP PROCEDURE InsertSpecial
+GO
+
+CREATE PROCEDURE InsertSpecial (
+	@SpecialId int output,
+	@SpecialTitle nvarchar(64),
+	@SpecialDescription  nvarchar(512)
+) AS
+BEGIN
+	
+	INSERT INTO Specials( SpecialTitle, SpecialDescription)
+	VALUES  (@SpecialTitle, @SpecialDescription)
+
+	SET
+	@SpecialId = SCOPE_IDENTITY();
+END
+GO
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'UpdateSpecial')
+      DROP PROCEDURE UpdateSpecial
+GO
+
+CREATE PROCEDURE UpdateSpecial (
+	@SpecialId int,
+	@SpecialTitle nvarchar(64),
+	@SpecialDescription  nvarchar(512)
+) AS
+BEGIN
+	UPDATE Specials SET
+	SpecialTitle = @SpecialTitle,
+	SpecialDescription = @SpecialDescription
+	WHERE SpecialId = @SpecialId
+END
+GO
+
+-- Delete Special
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'DeleteSpecial')
+      DROP PROCEDURE DeleteSpecial
+GO
+
+CREATE PROCEDURE DeleteSpecial (
+	@SpecialId int
+) AS
+BEGIN
+	DELETE FROM Specials
+	WHERE SpecialId = @SpecialId
 END
 GO
 
@@ -329,33 +771,7 @@ END
 ---- All Makes in System
 ---- show all Make / Date Added (to system) / User (who added make)
 
---IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
---	WHERE ROUTINE_NAME = 'DisplayMakes')
---		DROP PROCEDURE DisplayMakes
---GO
 
---CREATE PROCEDURE DisplayMakes AS
---BEGIN
---	SELECT m.MakeId, m.MakeName, users.UserName, m.DateAdded
---	FROM Make m
---		INNER JOIN AspNetUsers users ON m.Id = users.Id
---END
-
----- All Models in System
----- show all Make / Model / Date Added (to system) / User (who added model)
-
---IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
---	WHERE ROUTINE_NAME = 'DisplayModels')
---		DROP PROCEDURE DisplayModels
---GO
-
---CREATE PROCEDURE DisplayModels AS
---BEGIN
---	SELECT mk.MakeName, m.ModelName, users.UserName, m.DateAdded
---	FROM model m
---		INNER JOIN AspNetUsers users ON m.Id = users.Id
---		INNER JOIN Make mk on mk.MakeId = m.MakeId
---END
 
 
 

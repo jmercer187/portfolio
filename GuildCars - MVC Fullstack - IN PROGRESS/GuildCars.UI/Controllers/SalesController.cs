@@ -24,7 +24,6 @@ namespace GuildCars.UI.Controllers
         public ActionResult Details(int id)
         {
             var vehicleRepo = VehicleRepoFactory.CreateVehicleRepo();
-            var salesRepo = SaleRepoFactory.CreateSaleRepo();
 
             MakeSaleVM makeSaleVM = new MakeSaleVM();
 

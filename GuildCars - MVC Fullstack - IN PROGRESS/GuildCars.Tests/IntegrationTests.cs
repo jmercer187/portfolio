@@ -228,5 +228,128 @@ namespace GuildCars.Tests
             Assert.AreEqual("Cash", types[0].PurchaseType);
 
         }
+
+        [Test]
+        public void CanInsertSpecial()
+        {
+            Specials newSpecial = new Specials();
+            var repo = new MiscRepo();
+
+            newSpecial.SpecialTitle = "Test Title";
+            newSpecial.SpecialDescription = "Test Description";
+            
+            repo.InsertSpecial(newSpecial);
+
+            Assert.AreEqual(3, newSpecial.SpecialId);
+        }
+
+        [Test]
+        public void CanGetSpecialById()
+        {
+            var repo = new MiscRepo();
+
+            var special = repo.GetSpecialById(2);
+
+            Assert.AreEqual(2, special.SpecialId);
+            Assert.AreEqual("THE ONE ABOUT AMERICA", special.SpecialTitle);
+            Assert.AreEqual("our greatest president, savoryhams lincols, once said that we must not be enemies but customers. let us all remember to buy a car this gettysburg memorial holiday.", special.SpecialDescription);
+        }
+
+        [Test]
+        public void CanUpdateSpecial()
+        {
+            Specials updatedSpecial = new Specials();
+            var repo = new MiscRepo();
+
+            updatedSpecial.SpecialId = 2;
+            updatedSpecial.SpecialTitle = "Updated Title";
+            updatedSpecial.SpecialDescription = "Updated Description";
+            
+            repo.UpdateSpecial(updatedSpecial);
+            var special = repo.GetSpecialById(2);
+
+            Assert.AreEqual("Updated Title", special.SpecialTitle);
+        }
+
+        [Test]
+        public void CanDeleteSpecial()
+        {
+            var repo = new MiscRepo();
+
+            repo.DeleteSpecial(1);
+
+            var specials = repo.GetSpecials();
+
+            Assert.AreEqual(1, specials.Count());
+        }
+
+        [Test]
+        public void CanLoadBodyStyles()
+        {
+            var repo = new VehicleComponentsRepo();
+            var bodyStyles = repo.GetAllBodyStyles();
+
+            Assert.AreEqual(5, bodyStyles.Count());
+            Assert.AreEqual(2, bodyStyles[1].BodyStyleId);
+            Assert.AreEqual("Hatchback", bodyStyles[1].BodyStyleName);
+        }
+
+        [Test]
+        public void CanLoadColors()
+        {
+            var repo = new VehicleComponentsRepo();
+            var colors = repo.GetAllColors();
+
+            Assert.AreEqual(4, colors.Count());
+            Assert.AreEqual(2, colors[1].ColorId);
+            Assert.AreEqual("Red", colors[1].ColorName);
+        }
+
+        [Test]
+        public void CanLoadInteriors()
+        {
+            var repo = new VehicleComponentsRepo();
+            var interiors = repo.GetAllInteriors();
+
+            Assert.AreEqual(3, interiors.Count());
+            Assert.AreEqual(2, interiors[1].InteriorId);
+            Assert.AreEqual("Black / Grey Cloth", interiors[1].InteriorType);
+        }
+
+        [Test]
+        public void CanLoadMakes()
+        {
+            var repo = new VehicleComponentsRepo();
+            var makes = repo.GetAllMakes();
+
+            Assert.AreEqual(3, makes.Count());
+            Assert.AreEqual(2, makes[1].MakeId);
+            Assert.AreEqual("Ford", makes[1].MakeName);
+            Assert.AreEqual("test", makes[1].UserName);
+        }
+
+        [Test]
+        public void CanLoadModels()
+        {
+            var repo = new VehicleComponentsRepo();
+            var models = repo.GetAllModels();
+
+            Assert.AreEqual(3, models.Count());
+            Assert.AreEqual(2, models[1].ModelId);
+            Assert.AreEqual("Ford", models[1].MakeName);
+            Assert.AreEqual("F-150", models[1].ModelName);
+            Assert.AreEqual("test", models[1].UserName);
+        }
+
+        [Test]
+        public void CanLoadTransmissions()
+        {
+            var repo = new VehicleComponentsRepo();
+            var transmissions = repo.GetAllTransmissions();
+
+            Assert.AreEqual(2, transmissions.Count());
+            Assert.AreEqual(2, transmissions[1].TransmissionId);
+            Assert.AreEqual("Manual", transmissions[1].TransmissionType);
+        }
     }
 }

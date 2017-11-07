@@ -162,4 +162,11 @@ CREATE TABLE Specials(
 	SpecialDescription nvarchar(512) not null
 )
 
+--ALTER TABLE Model
+--   DROP CONSTRAINT FK_Model_MakeId3414ACBA
+
+--ALTER TABLE Model
+--   ADD CONSTRAINT FK_Model_MakeId3414ACBA_Cascade
+--   FOREIGN KEY (ModelId) REFERENCES Make(MakeId) ON DELETE CASCADE
+
 

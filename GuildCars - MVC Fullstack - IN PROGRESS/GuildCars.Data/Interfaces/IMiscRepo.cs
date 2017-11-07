@@ -10,5 +10,9 @@ namespace GuildCars.Data.Interfaces
     public interface IMiscRepo
     {
         List<Specials> GetSpecials();
+        Specials GetSpecialById(int specialId);
+        void InsertSpecial(Specials special);
+        void UpdateSpecial(Specials special);
+        void DeleteSpecial(int specialId);
     }
 }
