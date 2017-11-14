@@ -88,9 +88,9 @@ BEGIN
 
 	SET IDENTITY_INSERT Vehicle ON;
 	INSERT INTO Vehicle (VehicleId, ModelId, BodyStyleId, TransmissionId, ColorId, InteriorId, ModelYear, Mileage, VIN, New, Featured, Sold, ImageFilePath, VehicleDescription)
-	VALUES(1, 1, 3, 1, 3, 1, 2011, '34588', 'a1b2c3d4e5f6g7h8i9j10', 0, 0, 1, 'images/2011cruze.png', 'A reliable 4-door sedan with a comfortable interior.'),
-	(2, 2, 5, 1, 1, 2, 2017, '853', 'a1b2c3d4e5f6g7h8i9j10', 1, 1, 0, 'images/2017f150black.png', 'The best selling truck in all of these here united states.'),
-	(3, 3, 2, 2, 4, 3, 2012, '45781', 'a1b2c3d4e5f6g7h8i9j10', 0, 1, 0, 'images/2012c30.png', 'The definition of a hot hatch.')
+	VALUES(1, 1, 3, 1, 3, 1, 2011, '34588', 'a1b2c3d4e5f6g7h8i9j10', 0, 0, 1, 'inventory-1.png', 'A reliable 4-door sedan with a comfortable interior.'),
+	(2, 2, 5, 1, 1, 2, 2017, '853', 'a1b2c3d4e5f6g7h8i9j10', 1, 1, 0, 'inventory-2.png', 'The best selling truck in all of these here united states.'),
+	(3, 3, 2, 2, 4, 3, 2012, '45781', 'a1b2c3d4e5f6g7h8i9j10', 0, 1, 0, 'inventory-3.jpg', 'The definition of a hot hatch.')
 	SET IDENTITY_INSERT Vehicle OFF;
 	
 	SET IDENTITY_INSERT AddressCity ON;
@@ -164,7 +164,7 @@ BEGIN
 
 	SET IDENTITY_INSERT VehiclePrice ON;
 	INSERT INTO VehiclePrice(VehiclePriceId, VehicleId, MSRP, SalePrice, FromDate, ToDate)
-	VALUES(1, 1, 11000.00, NULL, '07/12/2016', NULL),
+	VALUES(1, 1, 11000, 10995, '07/12/2016', NULL),
 	(2, 2, 18000, 17000, '2017-01-01 00:00:00', NULL),
 	(3, 3, 14000, 13500, '2017-02-24 00:00:00', NULL)
 	SET IDENTITY_INSERT VehiclePrice OFF;

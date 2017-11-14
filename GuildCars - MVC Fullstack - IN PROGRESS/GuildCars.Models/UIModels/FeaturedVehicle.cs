@@ -12,7 +12,7 @@ namespace GuildCars.Models.UIModels
         public string MakeName { get; set; }
         public string ModelName { get; set; }
         public string Year { get; set; }
-        public string ImageFilePath { get; set; }
+        public string ImageFileName { get; set; }
         public decimal Price { get; set; }
     }
 }

@@ -57,6 +57,18 @@ IF EXISTS(SELECT * FROM sys.tables WHERE name='Specials')
 	DROP TABLE Specials
 GO
 
+IF EXISTS(SELECT * FROM sys.tables WHERE name='Contacts')
+	DROP TABLE Contacts
+GO
+
+CREATE TABLE Contacts (
+	ContactId int IDENTITY(1,1) not null PRIMARY KEY,
+	ContactName nvarchar(64) not null,
+	Email nvarchar(128) null,
+	Phone nvarchar(16) null,
+	Message nvarchar(1024) not null
+)
+
 CREATE TABLE Make (
 	MakeId int IDENTITY(1,1) not null PRIMARY KEY,
 	MakeName nvarchar(64) not null,
@@ -99,21 +111,21 @@ CREATE TABLE Vehicle (
 	TransmissionId int not null FOREIGN KEY REFERENCES Transmission(TransmissionId),
 	ColorId int not null FOREIGN KEY REFERENCES Color(ColorId),
 	InteriorId int not null FOREIGN KEY REFERENCES Interior(InteriorId),
-	ModelYear varchar (6) not null,
-	Mileage varchar (7) not null,
+	ModelYear int not null,
+	Mileage int not null,
 	VIN varchar (24) not null,
 	New bit not null,
 	Featured bit not null,
 	Sold bit not null,
-	ImageFilePath nvarchar (64)not null,
+	ImageFilePath nvarchar (64) null,
 	VehicleDescription nvarchar (512) not null,
 )
 
 CREATE TABLE VehiclePrice (
 	VehiclePriceId int IDENTITY(1,1) not null PRIMARY KEY,
 	VehicleId int not null FOREIGN KEY REFERENCES Vehicle(VehicleId),
-	MSRP decimal (13,2) not null,
-	SalePrice decimal (13,2) null,
+	MSRP int not null,
+	SalePrice int not null,
 	FromDate DateTime2 not null DEFAULT(getdate()),
 	ToDate DateTime2 null,
 )

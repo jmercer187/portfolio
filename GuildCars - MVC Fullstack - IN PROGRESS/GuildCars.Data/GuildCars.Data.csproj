@@ -45,15 +45,18 @@
     <Compile Include="CustomerRepo.cs" />
     <Compile Include="Factories\MiscRepoFactory.cs" />
     <Compile Include="Factories\SaleRepoFactory.cs" />
+    <Compile Include="Factories\SearchRepoFactory.cs" />
     <Compile Include="Factories\VehicleComponentsRepoFactory.cs" />
     <Compile Include="Factories\VehicleRepoFactory.cs" />
     <Compile Include="Interfaces\IMiscRepo.cs" />
     <Compile Include="Interfaces\ISaleRepo.cs" />
+    <Compile Include="Interfaces\ISearchRepo.cs" />
     <Compile Include="Interfaces\IVehicleComponentsRepo.cs" />
     <Compile Include="Interfaces\IVehicleRepo.cs" />
     <Compile Include="MiscRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaleRepo.cs" />
+    <Compile Include="SearchRepo.cs" />
     <Compile Include="VehicleComponentsRepo.cs" />
     <Compile Include="VehicleRepo.cs" />
   </ItemGroup>

@@ -1,6 +1,25 @@
 USE GuildCars
 GO
 
+-- contact message create
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'CreateContactMessage')
+		DROP PROCEDURE CreateContactMessage
+GO
+
+CREATE PROCEDURE CreateContactMessage (
+	@ContactName nvarchar(64),
+	@Email nvarchar(128),
+	@Phone nvarchar(16),
+	@Message nvarchar(1024)
+)AS
+BEGIN
+
+INSERT INTO Contacts(ContactName, Email, Phone, [Message])
+	VALUES (@ContactName, @Email, @Phone, @Message)
+
+END
+GO
 -- DISPLAYS
 
 -- Display All Vehicles -> then use LINQ to sort results instead of writing discrete SQL searches???
@@ -22,6 +41,41 @@ BEGIN
 		INNER JOIN Model md ON v.ModelId = md.ModelId
 		INNER JOIN Make mk ON md.MakeId = mk.MakeId
 		INNER JOIN VehiclePrice vp on vp.VehicleId = v.VehicleId
+END
+GO
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'SearchAllVehicles')
+		DROP PROCEDURE SearchAllVehicles
+GO
+
+CREATE PROCEDURE SearchAllVehicles (
+	@SearchTerm nvarchar(64),
+	@MinYear int,
+	@MaxYear int,
+	@MinPrice int,
+	@MaxPrice int
+
+)AS
+BEGIN
+	SELECT v.VehicleId, v.ModelYear, mk.MakeName, md.ModelName, b.BodyStyleName, c.ColorName, i.InteriorType, t.TransmissionType, v.Mileage, v.VehicleDescription, v.New, v.Sold, v.Featured, v.ImageFilePath, v.VIN, vp.MSRP, vp.SalePrice
+	FROM Vehicle v
+		INNER JOIN BodyStyle b ON v.BodyStyleId = b.BodyStyleId
+		INNER JOIN Color c ON v.ColorId = c.ColorId
+		INNER JOIN Interior i on v.InteriorId = i.InteriorId
+		INNER JOIN Transmission t on v.TransmissionId = t.TransmissionId
+		INNER JOIN Model md ON v.ModelId = md.ModelId
+		INNER JOIN Make mk ON md.MakeId = mk.MakeId
+		INNER JOIN VehiclePrice vp on vp.VehicleId = v.VehicleId
+	WHERE
+	((@SearchTerm IS NULL OR mk.MakeName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR md.ModelName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR v.ModelYear LIKE '%' + @SearchTerm + '%')) AND
+	 v.Sold = 0 AND
+	(@MinYear IS NULL OR v.ModelYear >= @MinYear) AND
+	(@MaxYear IS NULL OR v.ModelYear <= @MaxYear) AND
+	(@MinPrice IS NULL OR vp.SalePrice >= @MinPrice) AND
+	(@MaxPrice IS NULL OR vp.SalePrice <= @MaxPrice)
 END
 GO
 
@@ -96,6 +150,43 @@ BEGIN
 END
 GO
 
+-- Search New Vehicles unsold inventory
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'SearchNewVehicles')
+		DROP PROCEDURE SearchNewVehicles
+GO
+
+CREATE PROCEDURE SearchNewVehicles (
+	@SearchTerm nvarchar(64),
+	@MinYear int,
+	@MaxYear int,
+	@MinPrice int,
+	@MaxPrice int
+
+)AS
+BEGIN
+	SELECT v.VehicleId, v.ModelYear, mk.MakeName, md.ModelName, b.BodyStyleName, c.ColorName, i.InteriorType, t.TransmissionType, v.Mileage, v.VehicleDescription, v.New, v.Sold, v.Featured, v.ImageFilePath, v.VIN, vp.MSRP, vp.SalePrice
+	FROM Vehicle v
+		INNER JOIN BodyStyle b ON v.BodyStyleId = b.BodyStyleId
+		INNER JOIN Color c ON v.ColorId = c.ColorId
+		INNER JOIN Interior i on v.InteriorId = i.InteriorId
+		INNER JOIN Transmission t on v.TransmissionId = t.TransmissionId
+		INNER JOIN Model md ON v.ModelId = md.ModelId
+		INNER JOIN Make mk ON md.MakeId = mk.MakeId
+		INNER JOIN VehiclePrice vp on vp.VehicleId = v.VehicleId
+	WHERE 
+	((@SearchTerm IS NULL OR mk.MakeName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR md.ModelName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR v.ModelYear LIKE '%' + @SearchTerm + '%')) AND
+	 v.Sold = 0 AND
+	 v.New = 1 AND
+	(@MinYear IS NULL OR v.ModelYear >= @MinYear) AND
+	(@MaxYear IS NULL OR v.ModelYear <= @MaxYear) AND
+	(@MinPrice IS NULL OR vp.SalePrice >= @MinPrice) AND
+	(@MaxPrice IS NULL OR vp.SalePrice <= @MaxPrice)
+END
+GO
 -- Shows all USED vehicles
 
 IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
@@ -115,6 +206,45 @@ BEGIN
 		INNER JOIN Make mk ON md.MakeId = mk.MakeId
 		INNER JOIN VehiclePrice vp on vp.VehicleId = v.VehicleId
 	WHERE v.New = 0 AND v.Sold = 0
+END
+GO
+
+-- Search Used Vehicles unsold inventory
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'SearchUsedVehicles')
+		DROP PROCEDURE SearchUsedVehicles
+GO
+
+CREATE PROCEDURE SearchUsedVehicles (
+	@SearchTerm nvarchar(64),
+	@MinYear int,
+	@MaxYear int,
+	@MinPrice int,
+	@MaxPrice int
+
+)AS
+BEGIN
+	SELECT v.VehicleId, v.ModelYear, mk.MakeName, md.ModelName, b.BodyStyleName, c.ColorName, i.InteriorType, t.TransmissionType, v.Mileage, v.VehicleDescription, v.New, v.Sold, v.Featured, v.ImageFilePath, v.VIN, vp.MSRP, vp.SalePrice
+	FROM Vehicle v
+		INNER JOIN BodyStyle b ON v.BodyStyleId = b.BodyStyleId
+		INNER JOIN Color c ON v.ColorId = c.ColorId
+		INNER JOIN Interior i on v.InteriorId = i.InteriorId
+		INNER JOIN Transmission t on v.TransmissionId = t.TransmissionId
+		INNER JOIN Model md ON v.ModelId = md.ModelId
+		INNER JOIN Make mk ON md.MakeId = mk.MakeId
+		INNER JOIN VehiclePrice vp on vp.VehicleId = v.VehicleId
+	WHERE
+	((@SearchTerm IS NULL OR mk.MakeName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR md.ModelName LIKE '%' + @SearchTerm + '%') OR
+	(@SearchTerm IS NULL OR v.ModelYear LIKE '%' + @SearchTerm + '%')) AND
+	 v.Sold = 0 AND
+	 v.New = 0 AND
+	(@MinYear IS NULL OR v.ModelYear >= @MinYear) AND
+	(@MaxYear IS NULL OR v.ModelYear <= @MaxYear) AND
+	(@MinPrice IS NULL OR vp.SalePrice >= @MinPrice) AND
+	(@MaxPrice IS NULL OR vp.SalePrice <= @MaxPrice)
+
 END
 GO
 
@@ -203,6 +333,103 @@ END
 
 GO
 
+-- Edit Vehicle (admin only)
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'UpdateVehicle')
+	DROP PROCEDURE UpdateVehicle
+GO
+
+CREATE PROCEDURE UpdateVehicle (
+	@VehicleId int,
+	@BodyStyleName nvarchar(64),
+	@ColorName nvarchar(64),
+	@Featured bit,
+	@ImageFilepath nvarchar(64),
+	@InteriorType nvarchar(64),
+	@Mileage varchar(7),
+	@ModelName nvarchar(64),
+	@ModelYear char(4),
+	@New bit,
+	@Sold bit,
+	@TransmissionType nvarchar(24),
+	@VehicleDescription nvarchar(512),
+	@VIN varchar(24),
+	@MSRP decimal(13,2),
+	@SalePrice decimal(13,2)
+
+) AS
+BEGIN
+	DECLARE
+	@BodyStyleId int,
+	@ColorId int,
+	@InteriorId int,
+	@ModelId int,
+	@TransmissionId int
+	
+	BEGIN
+		SELECT @BodyStyleId = BodyStyleId FROM BodyStyle WHERE BodyStyleName = @BodyStyleName
+	END
+	BEGIN
+		SELECT @ColorId = ColorId FROM Color WHERE ColorName = @ColorName
+	END
+	BEGIN
+		SELECT @InteriorId = InteriorId FROM Interior WHERE InteriorType = @InteriorType
+	END
+	BEGIN
+		SELECT @ModelId = ModelId FROM Model WHERE ModelName = @ModelName
+	END
+	BEGIN
+		SELECT @TransmissionId = TransmissionId FROM Transmission WHERE TransmissionType = @TransmissionType
+	END
+
+	UPDATE Vehicle SET
+	ModelId = @ModelId,
+	BodyStyleId = @BodyStyleId,
+	TransmissionId = @TransmissionId,
+	ColorId = @ColorId,
+	InteriorId = @InteriorId,
+	ModelYear = @ModelYear, 
+	Mileage = @Mileage, 
+	VIN = @VIN,
+	New = @New,
+	Featured = @Featured, 
+	Sold = @Sold, 
+	ImageFilePath = @ImageFilepath, 
+	VehicleDescription = @VehicleDescription
+
+	WHERE VehicleId = @VehicleId
+
+	UPDATE VehiclePrice SET
+	MSRP = @MSRP,
+	SalePrice = @SalePrice
+	
+	WHERE VehicleId = @VehicleId
+
+END
+
+GO
+
+-- DELETE a Vehicle
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+   WHERE ROUTINE_NAME = 'DeleteVehicle')
+      DROP PROCEDURE DeleteVehicle
+GO
+
+CREATE PROCEDURE DeleteVehicle (
+	@VehicleId int
+) AS
+BEGIN
+	BEGIN TRANSACTION
+
+	DELETE FROM VehiclePrice WHERE VehicleId = @VehicleId;
+	DELETE FROM Vehicle WHERE VehicleId = @VehicleId;
+
+	COMMIT TRANSACTION
+END
+GO
+
 -- Display All Makes
 
 IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
@@ -244,9 +471,13 @@ GO
 CREATE PROCEDURE InsertMake (
 	@MakeId int output,
 	@MakeName nvarchar(64),
-	@Id nvarchar(128)
+	@UserName nvarchar(128)
 ) AS
 BEGIN
+	DECLARE
+	@Id nvarchar(64)
+
+	SELECT @Id = u.Id FROM AspNetUsers u WHERE u.UserName = @UserName
 	
 	INSERT INTO Make(MakeName, Id)
 	VALUES  (@MakeName, @Id)
@@ -293,6 +524,28 @@ BEGIN
 END
 GO
 
+-- search for models by make
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.ROUTINES
+	WHERE ROUTINE_NAME = 'DisplayModelsBySelectedMake')
+		DROP PROCEDURE DisplayModelsBySelectedMake
+GO
+
+CREATE PROCEDURE DisplayModelsBySelectedMake (
+	@MakeName nvarchar(64)
+)AS
+BEGIN
+	DECLARE
+	@MakeId int
+	
+	SELECT @MakeId = MakeId FROM Make WHERE MakeName = @MakeName
+
+	SELECT ModelName
+	FROM Model
+	WHERE MakeId = @MakeId
+
+END
+GO
+
 -- get model by ID (pretty much just for testing?)
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
 	WHERE ROUTINE_NAME = 'GetModelById')
@@ -319,12 +572,20 @@ GO
 CREATE PROCEDURE InsertModel (
 	@ModelId int output,
 	@ModelName nvarchar(64),
-	@Id nvarchar(128)
+	@MakeName nvarchar(64),
+	@UserName nvarchar(128)
 ) AS
 BEGIN
-	
-	INSERT INTO Model(ModelName, Id)
-	VALUES  (@ModelName, @Id)
+	DECLARE
+	@Id nvarchar(64),
+	@MakeId int
+
+	SELECT @Id = u.Id FROM AspNetUsers u WHERE u.UserName = @UserName
+
+	SELECT @MakeId = mk.MakeId FROM Make mk WHERE mk.MakeName = @MakeName
+
+	INSERT INTO Model(ModelName, Id, MakeId)
+	VALUES  (@ModelName, @Id, @MakeId)
 
 	SET
 	@ModelId = SCOPE_IDENTITY();
@@ -784,84 +1045,7 @@ END
 
 
 
--- Edit Vehicle (admin only)
 
---IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES
---	WHERE ROUTINE_NAME = 'VehicleUpdate')
---	DROP PROCEDURE VehicleUpdate
---GO
-
---CREATE PROCEDURE VehicleUpdate (
---	@VehicleId int,
---	@BodyStyleName nvarchar(64),
---	@ColorName nvarchar(64),
---	@Featured bit,
---	@ImageFilepath nvarchar(64),
---	@InteriorType nvarchar(64),
---	-- @MakeName nvarchar(64), don't actually need this?
---	@Mileage varchar(7),
---	@ModelName nvarchar(64),
---	@ModelYear char(4),
---	@New bit,
---	@Sold bit,
---	@TransmissionType nvarchar(24),
---	@VehicleDescription nvarchar(512),
---	@VIN varchar(24),
---	@MSRP decimal(13,2),
---	@SalePrice decimal(13,2)
-
---) AS
---BEGIN
---	DECLARE
---	@BodyStyleId int,
---	@ColorId int,
---	@InteriorId int,
---	@ModelId int,
---	@TransmissionId int
-	
---	BEGIN
---		SELECT @BodyStyleId = BodyStyleId FROM BodyStyle WHERE BodyStyleName = @BodyStyleName
---	END
---	BEGIN
---		SELECT @ColorId = ColorId FROM Color WHERE ColorName = @ColorName
---	END
---	BEGIN
---		SELECT @InteriorId = InteriorId FROM Interior WHERE InteriorType = @InteriorType
---	END
---	BEGIN
---		SELECT @ModelId = ModelId FROM Model WHERE ModelName = @ModelName
---	END
---	BEGIN
---		SELECT @TransmissionId = TransmissionId FROM Transmission WHERE TransmissionType = @TransmissionType
---	END
-
---	UPDATE Vehicle SET
---	ModelId = @ModelId,
---	BodyStyleId = @BodyStyleId,
---	TransmissionId = @TransmissionId,
---	ColorId = @ColorId,
---	InteriorId = @InteriorId,
---	ModelYear = @ModelYear, 
---	Mileage = @Mileage, 
---	VIN = @VIN,
---	New = @New,
---	Featured = @Featured, 
---	Sold = @Sold, 
---	ImageFilePath = @ImageFilepath, 
---	VehicleDescription = @VehicleDescription
-	
-	-- create if statement - if both MSRP and SalePrice are the same, then keep
-	-- if either is different, create new VehiclePrice, set previous VehiclePrice ToDate to end at new VP's FromDate
-	
---	INSERT VehiclePrice SET
---	VehicleId, 
---	MSRP, 
---	SalePrice
---	VALUES (@VehicleId, @MSRP, @SalePrice)
-
---END
-
---GO
 
 -- Add/Edit User
 -- Firstname / Lastname / email / Role / password / confirm password
@@ -886,11 +1070,7 @@ END
 
 -- SEARCHES
 
--- Search New Vehicles - returns top 20 sorted by MSRP
--- can search New Vehicles by @make or @model (put in dropdown) / parameters -> price min or price max or year min / year max
 
--- Search Used Vehicles
--- can search Used Vehicles by @make or @model (put in dropdown) / parameters -> price min or price max or year min / year max
 
 -- Inventory Report: Show New Vehicles
 -- Show Year, Make, Model, Count of, Total Sotck Value for all New Vehicles

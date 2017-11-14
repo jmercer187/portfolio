@@ -6,35 +6,140 @@
 
 <h2>Sales</h2>
 
-<p>put a search bar here</p>
-
 <div class="row">
-    @foreach (var vehicle in Model)
-    {
-        <div class="panel panel-default">
-            <div class="panel-heading">@vehicle.ModelYear @vehicle.MakeName @vehicle.ModelName</div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="search">Quick Search:</label>
+                <input type="search" class="form-control" id="search-term" placeholder="Enter Make, Model or Year">
 
-            <div class="panel-body">
-                <div class="col-sm-3"><img src="@vehicle.ImageFilePath" /></div>
-                <div class="col-sm-3">
-                    <p>Body Style: @vehicle.BodyStyleName</p>
-                    <p>Transmission: @vehicle.TransmissionType</p>
-                    <p>Color: @vehicle.ColorName</p>
-                </div>
-                <div class="col-sm-3">
-                    <p>Interior: @vehicle.InteriorType</p>
-                    <p>Mileage: @vehicle.Mileage</p>
-                    <p>VIN: @vehicle.VIN</p>
-                </div>
-                <div class="col-sm-3">
-                    <p>MSRP: @vehicle.MSRP</p>
-                    <p>Sale Price: @vehicle.SalePrice</p>
-                    <p>@Html.ActionLink("Purchase", "Details", "Sales", new { id = vehicle.VehicleId }, new { @class = "btn btn-info" })</p>
-                </div>
+                <label for="price" class="control-label">
+                    Price:
+                </label>
+                <select class="form-control" id="price-min-select" required>
+                    <option value="null">-NO MIN-</option>
+                    <option value="500">$500</option>
+                    <option value="1000">$1,000</option>
+                    <option value="5000">$5,000</option>
+                    <option value="10000">$10,000</option>
+                    <option value="15000">$15,000</option>
+                    <option value="20000">$20,000</option>
+                    <option value="25000">$25,000</option>
+                </select>
+                <select class="form-control" id="price-max-select" required>
+                    <option value="null">-NO MAX-</option>
+                    <option value="500">$500</option>
+                    <option value="1000">$1,000</option>
+                    <option value="5000">$5,000</option>
+                    <option value="10000">$10,000</option>
+                    <option value="15000">$15,000</option>
+                    <option value="20000">$20,000</option>
+                    <option value="25000">$25,000</option>
+                    <option value="30000">$30,000</option>
+                </select>
 
+                <label for="year" class="control-label">
+                    Year:
+                </label>
+                <select class="form-control" id="year-min-select" required>
+                    <option value="null">-NO MIN-</option>
+                    <option value="1990">1990</option>
+                    <option value="1995">1995</option>
+                    <option value="2000">2000</option>
+                    <option value="2005">2005</option>
+                    <option value="2010">2010</option>
+                    <option value="2015">2015</option>
+                </select>
+                <select class="form-control" id="year-max-select" required>
+                    <option value="null">-NO MAX-</option>
+                    <option value="1990">1990</option>
+                    <option value="1995">1995</option>
+                    <option value="2000">2000</option>
+                    <option value="2005">2005</option>
+                    <option value="2010">2010</option>
+                    <option value="2015">2015</option>
+                </select>
             </div>
         </div>
-        <hr />
-    }
+        <button type="button"
+                class="btn btn-primary col-md-2 col-md-offset-5"
+                id="search-button">
+            Search
+        </button>
+    </div>
 </div>
+
+<hr />
+
+<div id="vehicle-list"></div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#search-button").click(function (event) {
+                search();
+                return false;
+            });
+        });
+
+
+        function search() {
+
+            $('#vehicle-list').empty();
+            var vehicleList = $('#vehicle-list')
+
+            if (!$('#search-term').val()) {
+                var searchTerm = "nullvalue";
+            } else {
+                var searchTerm = $('#search-term').val();
+            }
+
+            params = searchTerm + '/' + $('#price-min-select').val() + '/' + $('#price-max-select').val() + '/' +
+                $('#year-min-select').val() + '/' + $('#year-max-select').val();
+
+            var imagePath = '@Url.Content("~/Images/")';
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:62036/sales/index/' + params,
+                success: function (results) {
+
+                    $.each(results, function (index, vehicle) {
+                        var VehicleId = vehicle.VehicleId;
+                        var ModelYear = vehicle.ModelYear;
+                        var MakeName = vehicle.MakeName;
+                        var ModelName = vehicle.ModelName;
+                        var ImageFileName = vehicle.ImageFileName;
+                        var BodyStyleName = vehicle.BodyStyleName;
+                        var TransmissionType = vehicle.TransmissionType;
+                        var ColorName = vehicle.ColorName;
+                        var InteriorType = vehicle.InteriorType;
+                        var Mileage = vehicle.Mileage;
+                        var VIN = vehicle.VIN;
+                        var MSRP = vehicle.MSRP;
+                        var SalePrice = vehicle.SalePrice;
+
+                        var panelHeading = ModelYear + ' ' + ModelName + ' ' + MakeName;
+                        var panelBodyColumn1 = '<img src="' + imagePath + ImageFileName + '" alt="' + MakeName + ModelName + '" style="height:150px;width:200px"/>';
+                        var panelBodyColumn2 = '<p>Body Style: ' + BodyStyleName + '</p><p>Transmission: ' + TransmissionType + '</p><p> Color: ' + ColorName + '</p>';
+                        var panelBodyColumn3 = '<p>Interior: ' + InteriorType + '</p><p>Mileage: ' + Mileage + '</p><p>VIN: ' + VIN + '</p>';
+                        var panelBodyColumn4 = '<p>MSRP: ' + MSRP + '</p><p>Sale Price: ' + SalePrice + '</p><p><a class="btn btn-info" href="/Sales/Details/' + VehicleId + '">Details</a>';
+
+                        var vehiclePanel = '<div class="panel panel-default"><div class="panel-heading">' + panelHeading + '</div><div class="panel-body"><div class="col-sm-3">' + panelBodyColumn1 + '</div><div class="col-sm-3">' + panelBodyColumn2 + '</div><div class="col-sm-3">' + panelBodyColumn3 + '</div><div class="col-sm-3">' + panelBodyColumn4 + '</div></div>';
+
+                        vehicleList.append(vehiclePanel);
+                    });
+
+                },
+                error: function () {
+                    alert('Error performing search, please try again later!')
+                }
+            });
+        }
+    </script>
+}
+
+
+
 

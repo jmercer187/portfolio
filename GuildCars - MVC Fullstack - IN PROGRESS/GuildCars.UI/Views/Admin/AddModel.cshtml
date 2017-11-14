@@ -1,0 +1,56 @@
+﻿@model GuildCars.UI.Models.ModelVM
+
+@{
+    ViewBag.Title = "AddModel";
+}
+
+<h2>Models</h2>
+
+@Html.ValidationSummary(true)
+@using (Html.BeginForm("AddModel", "Admin", FormMethod.Post))
+{
+    <div class="form-group">
+        <div class="form-group col-md-6">
+            <label>Add a Model</label>
+            @Html.TextBoxFor(m => m.NameOfNewModel, new { @class = "form-control" })
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.NameOfNewModel)</span>
+        </div>
+        
+        <div class="form-group col-md-6">
+                <label>Select a Make</label>
+                @Html.DropDownListFor(v => v.MakeName, Model.Makes, "-SELECT-", new { @class = "form-control", @id = "make-dropdown" })
+                <span class="text-danger">@Html.ValidationMessageFor(m => m.MakeName)</span>
+
+        </div>
+   </div>
+    <button class="btn btn-primary">Add Model</button>
+
+}
+
+<hr />
+
+<div class="row">
+    <div class="col-xs-10">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Date Added</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Models)
+                {
+                    <tr>
+                        <td>@item.ModelName</td>
+                        <td>@item.MakeName</td>
+                        <td>@item.DateAdded</td>
+                        <td>@item.UserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

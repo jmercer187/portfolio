@@ -1,10 +1,10 @@
 ﻿@model GuildCars.UI.Models.AddEditVehicleVM
 
 @{
-    ViewBag.Title = "AddVehicle";
+    ViewBag.Title = "EditVehicle";
 }
 
-<h2>Add a New Vehicle</h2>
+<h2>Edit Vehicle Details</h2>
 
 <div>
     <hr />
@@ -18,20 +18,20 @@
                 <label>Make</label>
                 @Html.DropDownListFor(v => v.MakeName, Model.Make, "-SELECT-", new { @class = "form-control", @id = "make-dropdown" })
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6" id="model-dropdown">
                 <label>Model</label>
-                <select class="form-control" data-val="true" data-val-required="Please select a model" id="ModelName" name="ModelName">
-
-                    
-                </select>
-                </div>
-          </div>
+                <div id="model-dropdown-menu"></div>
+                <select class="form-control" data-val="true" data-val-required="Please select a model" id="ModelName" name="ModelName"></select>
+            </div>
+        </div>
 
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label>Type</label>
-                <p>New: @Html.RadioButtonFor(v => v.Type, true) || 
-                Used: @Html.RadioButtonFor(v => v.Type, false)</p>
+                <p>
+                    New: @Html.RadioButtonFor(v => v.Type, true) ||
+                    Used: @Html.RadioButtonFor(v => v.Type, false)
+                </p>
             </div>
             <div class="form-group col-md-6">
                 <label>Body Style</label>
@@ -82,13 +82,13 @@
                 @Html.TextBoxFor(v => v.SalePrice, new { @class = "form-control" })
             </div>
         </div>
-        
+
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label>Featured</label>
                 @Html.CheckBoxFor(v => v.Featured, new { @class = "form-control" })
             </div>
-        
+
             <div class="form-group col-md-6">
                 <label>Description</label>
                 @Html.TextAreaFor(v => v.Description, new { @class = "form-control" })
@@ -96,18 +96,31 @@
         </div>
 
         <div class="form-group">
-            <label>Select Image:</label>
+            <img src="@Url.Content("~/Images/" + Model.vehicle.ImageFileName)" alt="@Model.vehicle.MakeName @Model.vehicle.ModelName" style="height:150px;width:200px" />
+
+        </div>
+
+        <div class="form-group">
+            <label>Replace Image:</label>
             @Html.TextBoxFor(v => v.UploadedImage, new { type = "file", @class = "form-control" })
         </div>
 
         <hr />
-
+        <div class="form-group">
             @Html.ActionLink("Cancel", "Index", "Admin", null, new { @class = "btn btn-default" })
-            <button class="btn btn-primary">Create New Vehicle</button>
-
-
+            <button class="btn btn-primary">Save Changes</button>
+        </div>
+        
     }
+    
+    <div class="form-group">
+        @using (Html.BeginForm("DeleteVehicle", "Admin", new { id = Model.vehicle.VehicleId }, FormMethod.Post))
+        {
+            <button class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this @Model.vehicle.ModelYear @Model.vehicle.MakeName @Model.vehicle.ModelName from the database?');">Delete Vehicle</button>
+        }
+    </div>
 </div>
+
 
 @section Scripts
 {
@@ -139,3 +152,4 @@
 
     </script>
 }
+

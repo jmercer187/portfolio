@@ -33,7 +33,7 @@ namespace GuildCars.Data
                         currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
                         currentRow.ColorName = dr["ColorName"].ToString();
                         currentRow.Featured = (bool)dr["Featured"];
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.InteriorType = dr["InteriorType"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.Mileage = dr["Mileage"].ToString();
@@ -45,10 +45,10 @@ namespace GuildCars.Data
                         currentRow.VehicleDescription = dr["VehicleDescription"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.VIN = dr["VIN"].ToString();
-                        currentRow.MSRP = (decimal)dr["MSRP"];
+                        currentRow.MSRP = (int)dr["MSRP"];
                         
                         if (dr["SalePrice"] != DBNull.Value)
-                            currentRow.SalePrice = (decimal)dr["SalePrice"];
+                            currentRow.SalePrice = (int)dr["SalePrice"];
 
                         vehicles.Add(currentRow);
                     }
@@ -80,7 +80,7 @@ namespace GuildCars.Data
                         currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
                         currentRow.ColorName = dr["ColorName"].ToString();
                         currentRow.Featured = (bool)dr["Featured"];
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.InteriorType = dr["InteriorType"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.Mileage = dr["Mileage"].ToString();
@@ -92,9 +92,9 @@ namespace GuildCars.Data
                         currentRow.VehicleDescription = dr["VehicleDescription"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.VIN = dr["VIN"].ToString();
-                        currentRow.MSRP = (decimal)dr["MSRP"];
+                        currentRow.MSRP = (int)dr["MSRP"];
                         if (dr["SalePrice"] != DBNull.Value)
-                            currentRow.SalePrice = (decimal)dr["SalePrice"];
+                            currentRow.SalePrice = (int)dr["SalePrice"];
 
                         vehicle = currentRow;
                     }
@@ -119,7 +119,6 @@ namespace GuildCars.Data
                 cmd.Parameters.AddWithValue("@BodyStyleName", vehicle.BodyStyleName);
                 cmd.Parameters.AddWithValue("@ColorName", vehicle.ColorName);
                 cmd.Parameters.AddWithValue("@Featured", vehicle.Featured);
-                cmd.Parameters.AddWithValue("@ImageFilePath", vehicle.ImageFilePath);
                 cmd.Parameters.AddWithValue("@InteriorType", vehicle.InteriorType);
                 cmd.Parameters.AddWithValue("@Mileage", vehicle.Mileage);
                 cmd.Parameters.AddWithValue("@ModelName", vehicle.ModelName);
@@ -131,6 +130,16 @@ namespace GuildCars.Data
                 cmd.Parameters.AddWithValue("@VIN", vehicle.VIN);
                 cmd.Parameters.AddWithValue("@MSRP", vehicle.MSRP);
                 cmd.Parameters.AddWithValue("@SalePrice", vehicle.SalePrice);
+
+                if (string.IsNullOrEmpty(vehicle.ImageFileName))
+                {
+                    cmd.Parameters.AddWithValue("@ImageFilePath", DBNull.Value);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@ImageFilePath", vehicle.ImageFileName);
+                }
+
 
                 cn.Open();
 
@@ -145,19 +154,45 @@ namespace GuildCars.Data
         {
             using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
             {
-                SqlCommand cmd = new SqlCommand("VehicleUpdate", cn);
+                SqlCommand cmd = new SqlCommand("UpdateVehicle", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
+                cmd.Parameters.AddWithValue("@VehicleId", vehicle.VehicleId);
+                cmd.Parameters.AddWithValue("@BodyStyleName", vehicle.BodyStyleName);
+                cmd.Parameters.AddWithValue("@ColorName", vehicle.ColorName);
+                cmd.Parameters.AddWithValue("@Featured", vehicle.Featured);
+                cmd.Parameters.AddWithValue("@InteriorType", vehicle.InteriorType);
+                cmd.Parameters.AddWithValue("@Mileage", vehicle.Mileage);
+                cmd.Parameters.AddWithValue("@ModelName", vehicle.ModelName);
+                cmd.Parameters.AddWithValue("@ModelYear", vehicle.ModelYear);
+                cmd.Parameters.AddWithValue("@New", vehicle.New);
+                cmd.Parameters.AddWithValue("@Sold", vehicle.Sold);
+                cmd.Parameters.AddWithValue("@TransmissionType", vehicle.TransmissionType);
+                cmd.Parameters.AddWithValue("@VehicleDescription", vehicle.VehicleDescription);
+                cmd.Parameters.AddWithValue("@VIN", vehicle.VIN);
+                cmd.Parameters.AddWithValue("@MSRP", vehicle.MSRP);
+                cmd.Parameters.AddWithValue("@SalePrice", vehicle.SalePrice);
+                cmd.Parameters.AddWithValue("@ImageFilePath", vehicle.ImageFileName);
 
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
             }
-
-
-
         }
 
         public void DeleteVehicle(int vehicleId)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("DeleteVehicle", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@VehicleId", vehicleId);
+
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public List<FeaturedVehicle> GetFeaturedVehicles()
@@ -177,12 +212,12 @@ namespace GuildCars.Data
                     {
                         FeaturedVehicle currentRow = new FeaturedVehicle();
                         
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.ModelName = dr["ModelName"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.Year = dr["ModelYear"].ToString();
-                        currentRow.Price = (decimal)dr["Price"];
+                        currentRow.Price = (int)dr["Price"];
 
                         vehicles.Add(currentRow);
                     }
@@ -212,7 +247,7 @@ namespace GuildCars.Data
                         currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
                         currentRow.ColorName = dr["ColorName"].ToString();
                         currentRow.Featured = (bool)dr["Featured"];
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.InteriorType = dr["InteriorType"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.Mileage = dr["Mileage"].ToString();
@@ -224,9 +259,9 @@ namespace GuildCars.Data
                         currentRow.VehicleDescription = dr["VehicleDescription"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.VIN = dr["VIN"].ToString();
-                        currentRow.MSRP = (decimal)dr["MSRP"];
+                        currentRow.MSRP = (int)dr["MSRP"];
                         if (dr["SalePrice"] != DBNull.Value)
-                            currentRow.SalePrice = (decimal)dr["SalePrice"];
+                            currentRow.SalePrice = (int)dr["SalePrice"];
 
                         vehicles.Add(currentRow);
                     }
@@ -256,7 +291,7 @@ namespace GuildCars.Data
                         currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
                         currentRow.ColorName = dr["ColorName"].ToString();
                         currentRow.Featured = (bool)dr["Featured"];
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.InteriorType = dr["InteriorType"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.Mileage = dr["Mileage"].ToString();
@@ -268,9 +303,9 @@ namespace GuildCars.Data
                         currentRow.VehicleDescription = dr["VehicleDescription"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.VIN = dr["VIN"].ToString();
-                        currentRow.MSRP = (decimal)dr["MSRP"];
+                        currentRow.MSRP = (int)dr["MSRP"];
                         if (dr["SalePrice"] != DBNull.Value)
-                            currentRow.SalePrice = (decimal)dr["SalePrice"];
+                            currentRow.SalePrice = (int)dr["SalePrice"];
 
                         vehicles.Add(currentRow);
                     }
@@ -300,7 +335,7 @@ namespace GuildCars.Data
                         currentRow.BodyStyleName = dr["BodyStyleName"].ToString();
                         currentRow.ColorName = dr["ColorName"].ToString();
                         currentRow.Featured = (bool)dr["Featured"];
-                        currentRow.ImageFilePath = dr["ImageFilePath"].ToString();
+                        currentRow.ImageFileName = dr["ImageFilePath"].ToString();
                         currentRow.InteriorType = dr["InteriorType"].ToString();
                         currentRow.MakeName = dr["MakeName"].ToString();
                         currentRow.Mileage = dr["Mileage"].ToString();
@@ -312,9 +347,9 @@ namespace GuildCars.Data
                         currentRow.VehicleDescription = dr["VehicleDescription"].ToString();
                         currentRow.VehicleId = (int)dr["VehicleId"];
                         currentRow.VIN = dr["VIN"].ToString();
-                        currentRow.MSRP = (decimal)dr["MSRP"];
+                        currentRow.MSRP = (int)dr["MSRP"];
                         if (dr["SalePrice"] != DBNull.Value)
-                            currentRow.SalePrice = (decimal)dr["SalePrice"];
+                            currentRow.SalePrice = (int)dr["SalePrice"];
 
                         vehicles.Add(currentRow);
                     }

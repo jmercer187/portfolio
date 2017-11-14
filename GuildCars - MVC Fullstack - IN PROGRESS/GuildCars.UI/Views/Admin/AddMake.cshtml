@@ -1,0 +1,48 @@
+﻿@model GuildCars.UI.Models.MakeVM
+
+@{
+    ViewBag.Title = "AddMake";
+}
+
+<h2>Makes</h2>
+
+@Html.ValidationSummary(true)
+@using (Html.BeginForm("AddMake", "Admin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>Add a Vehicle Make</label>
+        @Html.TextBoxFor(m => m.NameOfNewMake, new { @class = "form-control" })
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.NameOfNewMake)</span>
+
+    </div>
+        <button class="btn btn-primary">Add Make</button>
+
+}
+
+<hr />
+
+<div class="row">
+    <div class="col-xs-10">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Date Added</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var make in Model.Makes)
+                {
+                    <tr>
+                        <td>@make.MakeName</td>
+                        <td>@make.DateAdded</td>
+                        <td>@make.UserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

@@ -21,7 +21,7 @@ namespace GuildCars.Models.UIModels
         public bool New { get; set; }
         public bool Featured { get; set; }
         public bool Sold { get; set; }
-        public string ImageFilePath { get; set; }
+        public string ImageFileName { get; set; }
         public string VehicleDescription { get; set; }
         public decimal MSRP { get; set; }
         public decimal SalePrice { get; set; }

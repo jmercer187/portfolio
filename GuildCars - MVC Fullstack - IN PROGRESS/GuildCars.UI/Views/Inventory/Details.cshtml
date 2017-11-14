@@ -14,7 +14,7 @@
 
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-3"><img src="@Model.ImageFilePath" /></div>
+                    <div class="col-sm-3"><div class="col-sm-3"><img src="@Url.Content("~/Images/" + Model.ImageFileName)" alt="@Model.MakeName @Model.ModelName" style="height:150px;width:200px" /></div></div>
                     <div class="col-sm-3">
                         <p>Body Style: @Model.BodyStyleName</p>
                         <p>Transmission: @Model.TransmissionType</p>
@@ -36,9 +36,14 @@
 
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-3 col-md-offset-9">
+                    <p>@Html.ActionLink("Contact Us", "ContactFromDetail", "Home", new { VIN = Model.VIN }, new { @class = "btn btn-info" })</p>
+
+                </div>
+            </div>
         </div>
-        <hr />
+
     
-    <p>@Html.ActionLink("Contact Us", "Contact", "Home", null, new { @class = "btn btn-info" })</p>
 
 </div>

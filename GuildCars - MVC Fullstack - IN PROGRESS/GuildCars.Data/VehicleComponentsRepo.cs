@@ -221,12 +221,49 @@ namespace GuildCars.Data
 
         public void InsertMake(Make make)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("InsertMake", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter param = new SqlParameter("@MakeId", SqlDbType.Int);
+                param.Direction = ParameterDirection.Output;
+
+                cmd.Parameters.Add(param);
+
+                cmd.Parameters.AddWithValue("@MakeName", make.MakeName);
+                cmd.Parameters.AddWithValue("@UserName", make.UserName);
+
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                make.MakeId = (int)param.Value;
+            };
         }
 
         public void InsertModel(Model model)
         {
-            throw new NotImplementedException();
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("InsertModel", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlParameter param = new SqlParameter("@ModelId", SqlDbType.Int);
+                param.Direction = ParameterDirection.Output;
+
+                cmd.Parameters.Add(param);
+
+                cmd.Parameters.AddWithValue("@ModelName", model.ModelName);
+                cmd.Parameters.AddWithValue("@MakeName", model.MakeName);
+                cmd.Parameters.AddWithValue("@UserName", model.UserName);
+
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                model.ModelId = (int)param.Value;
+            }
         }
 
         public void UpdateBodyStyle(BodyStyle bodyStyle)

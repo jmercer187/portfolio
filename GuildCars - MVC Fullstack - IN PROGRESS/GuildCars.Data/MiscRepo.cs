@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GuildCars.Models.Queries;
 
 namespace GuildCars.Data
 {
@@ -82,6 +83,40 @@ namespace GuildCars.Data
             return specials;
         }
 
+        public void InsertMessage(Contact message)
+        {
+            using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
+            {
+                SqlCommand cmd = new SqlCommand("CreateContactMessage", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ContactName", message.ContactName);
+                cmd.Parameters.AddWithValue("@Message", message.Message);
+
+                if (string.IsNullOrEmpty(message.Email))
+                {
+                    cmd.Parameters.AddWithValue("@Email", DBNull.Value);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@Email", message.Email);
+                }
+
+                if (string.IsNullOrEmpty(message.Phone))
+                {
+                    cmd.Parameters.AddWithValue("@Phone", DBNull.Value);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@Phone", message.Phone);
+                }
+
+                cn.Open();
+
+                cmd.ExecuteNonQuery();
+            };
+        }
+
         public void InsertSpecial(Specials special)
         {
             using (var cn = new SqlConnection("Server=localhost;Database=GuildCars;User Id=sa;Password=sqlserver;"))
@@ -122,4 +157,4 @@ namespace GuildCars.Data
             }
         }
     }
-}
+ }

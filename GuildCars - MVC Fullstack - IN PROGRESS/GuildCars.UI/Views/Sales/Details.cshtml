@@ -14,7 +14,7 @@
 
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-3"><img src="@Model.Vehicle.ImageFilePath" /></div>
+                <div class="col-sm-3"><img src="@Url.Content("~/Images/" + Model.Vehicle.ImageFileName)" alt="@Model.Vehicle.MakeName @Model.Vehicle.ModelName" style="height:150px;width:200px" /></div>
                 <div class="col-sm-3">
                     <p>Body Style: @Model.Vehicle.BodyStyleName</p>
                     <p>Transmission: @Model.Vehicle.TransmissionType</p>

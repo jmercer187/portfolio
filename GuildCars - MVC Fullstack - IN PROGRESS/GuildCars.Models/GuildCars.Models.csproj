@@ -41,10 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\Search.cs" />
     <Compile Include="Tables\AddressCity.cs" />
     <Compile Include="Tables\AddressState.cs" />
     <Compile Include="Tables\BodyStyle.cs" />
     <Compile Include="Tables\Color.cs" />
+    <Compile Include="Tables\Contact.cs" />
     <Compile Include="Tables\Customer.cs" />
     <Compile Include="Tables\Interior.cs" />
     <Compile Include="Tables\Make.cs" />
@@ -58,8 +60,6 @@
     <Compile Include="UIModels\FeaturedVehicle.cs" />
     <Compile Include="UIModels\VehicleUI.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

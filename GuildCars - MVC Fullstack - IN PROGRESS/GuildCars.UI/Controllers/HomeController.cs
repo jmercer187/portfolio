@@ -28,9 +28,41 @@ namespace GuildCars.UI.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Contact";
-
             return View();
+        }
+
+        public ActionResult ContactFromDetail(string VIN)
+        {
+            ContactVM contactVM = new ContactVM();
+
+            string message = "I would like more information about the vehicle with VIN: " + VIN;
+
+            contactVM.Message = message;
+
+            return View("Contact", contactVM);
+        }
+
+        [HttpPost]
+        public ActionResult Contact(ContactVM message)
+        {
+            var repo = MiscRepoFactory.CreateMiscRepo();
+            Contact contactMessage = new Contact();
+
+            if (ModelState.IsValid)
+            {
+                contactMessage.ContactName = message.ContactName;
+                contactMessage.Email = message.Email;
+                contactMessage.Phone = message.Phone;
+                contactMessage.Message = message.Message;
+
+                repo.InsertMessage(contactMessage);
+
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View(message);
+            }
         }
 
         public ActionResult Specials()

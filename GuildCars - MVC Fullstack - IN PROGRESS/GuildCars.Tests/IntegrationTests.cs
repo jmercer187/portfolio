@@ -69,7 +69,7 @@ namespace GuildCars.Tests
             Assert.AreEqual(false, vehicle.Sold);
             Assert.AreEqual("a1b2c3d4e5f6g7h8i9j10", vehicle.VIN);
             Assert.AreEqual("The definition of a hot hatch.", vehicle.VehicleDescription);
-            Assert.AreEqual("images/2012c30.png", vehicle.ImageFilePath);
+            Assert.AreEqual("inventory-3.jpg", vehicle.ImageFileName);
             
         }
 
@@ -82,7 +82,7 @@ namespace GuildCars.Tests
             vehicle.BodyStyleName = "Truck";
             vehicle.ColorName = "Red";
             vehicle.Featured = true;
-            vehicle.ImageFilePath = "images/2016fordescape.png";
+            vehicle.ImageFileName = "images/2016fordescape.png";
             vehicle.InteriorType = "Beige / Leather";
             vehicle.Mileage = "18564";
             vehicle.ModelName = "F-150";
@@ -113,7 +113,7 @@ namespace GuildCars.Tests
             Assert.AreEqual("F-150", vehicles[0].ModelName);
             Assert.AreEqual("2017", vehicles[0].Year);
             Assert.AreEqual(17000.00M, vehicles[0].Price);
-            Assert.AreEqual("images/2017f150black.png", vehicles[0].ImageFilePath);
+            Assert.AreEqual("inventory-2.png", vehicles[0].ImageFileName);
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace GuildCars.Tests
             Assert.AreEqual(false, vehicles[0].Sold);
             Assert.AreEqual("a1b2c3d4e5f6g7h8i9j10", vehicles[0].VIN);
             Assert.AreEqual("The best selling truck in all of these here united states.", vehicles[0].VehicleDescription);
-            Assert.AreEqual("images/2017f150black.png", vehicles[0].ImageFilePath);
+            Assert.AreEqual("inventory-2.png", vehicles[0].ImageFileName);
 
         }
 
@@ -164,7 +164,7 @@ namespace GuildCars.Tests
             Assert.AreEqual(false, vehicles[0].Sold);
             Assert.AreEqual("a1b2c3d4e5f6g7h8i9j10", vehicles[0].VIN);
             Assert.AreEqual("The definition of a hot hatch.", vehicles[0].VehicleDescription);
-            Assert.AreEqual("images/2012c30.png", vehicles[0].ImageFilePath);
+            Assert.AreEqual("inventory-3.jpg", vehicles[0].ImageFileName);
 
         }
 
@@ -202,7 +202,7 @@ namespace GuildCars.Tests
             Assert.AreEqual(false, vehicles[0].Sold);
             Assert.AreEqual("a1b2c3d4e5f6g7h8i9j10", vehicles[0].VIN);
             Assert.AreEqual("The best selling truck in all of these here united states.", vehicles[0].VehicleDescription);
-            Assert.AreEqual("images/2017f150black.png", vehicles[0].ImageFilePath);
+            Assert.AreEqual("inventory-2.png", vehicles[0].ImageFileName);
 
         }
 
@@ -351,5 +351,36 @@ namespace GuildCars.Tests
             Assert.AreEqual(2, transmissions[1].TransmissionId);
             Assert.AreEqual("Manual", transmissions[1].TransmissionType);
         }
+
+        [Test]
+        public void CanAddNewMake()
+        {
+            Make newMake = new Make();
+            var repo = new VehicleComponentsRepo();
+
+            newMake.MakeName = "Honda";
+            newMake.UserName = "test";
+
+            repo.InsertMake(newMake);
+
+            Assert.AreEqual(4, newMake.MakeId);
+        }
+
+        [Test]
+        public void CadAddNewModel()
+        {
+            Model newModel = new Model();
+            var repo = new VehicleComponentsRepo();
+
+            newModel.ModelName = "Focus";
+            newModel.MakeName = "Ford";
+            newModel.UserName = "test";
+
+            repo.InsertModel(newModel);
+
+            Assert.AreEqual(4, newModel.ModelId);
+            
+        }
+
     }
 }
